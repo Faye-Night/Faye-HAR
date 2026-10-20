@@ -114,15 +114,11 @@ Get-CimInstance Win32_Process -Filter "Name='msedge.exe' OR Name='chrome.exe'" |
 
 用 qd 的 `Fetcher().do_fetch(tpl, env)` 跑，`env` 用空变量环境模拟真实 qd 的渲染路径。四个场景全绿再交付。
 
-## 阶段五：落盘与目录结构
+## 阶段五：落盘
 
-目录规范见仓库根 [AGENTS.md](../../../AGENTS.md)，要点：
+目录位置与命名规则以仓库根 [AGENTS.md](../../../AGENTS.md) 为准，**此处不重复**——那份文件是强制规范，本 skill 只管"怎么做"。落盘前先读它。
 
-- 一个网站一个目录：`{网站名}-{网址}`，如 `KRENE-www.krene.com`；APP 无网址时用开发者名或包名
-- 网站名**大写**、网址**小写**（Windows 不区分大小写，Linux/GitHub 区分）
-- 站点目录内说明文档命名为 `readme_{网站名}.md`，不要放 `README.md`
-
-每个站点目录建议包含：
+下面只讲 skill 侧的做法。每个站点目录建议包含：
 
 ```
 {网站名}-{网址}/
@@ -135,7 +131,7 @@ Get-CimInstance Win32_Process -Filter "Name='msedge.exe' OR Name='chrome.exe'" |
 
 **脚本而不是手写 JSON**：模板里的断言正则会反复调整，用脚本生成才能保证可复现、可审查、可 diff。脚本里凭据一律用占位符常量，输出路径用 `os.path.dirname(os.path.abspath(__file__))` 而不是硬编码绝对路径。
 
-**凭据绝不入库**：token、手机号、邮箱、用户 ID 全部替换为 `<YOUR_TOKEN>` / `<YOUR_PHONE>` 之类占位符，并在 `readme_{网站名}.md` 里说明如何获取。生成脚本也不要默认写出含真实凭据的版本。
+**凭据处理**：脱敏要求见 AGENTS.md 规则三。skill 侧的额外要求是——**生成脚本也不要默认写出含真实凭据的版本**，`build(real=True)` 这类调试分支保留但不落盘；`readme_{网站名}.md` 里必须写清每个变量怎么获取（如浏览器控制台 `JSON.parse(localStorage.getItem("userInfo")).token`）。
 
 ## 交付前检查
 

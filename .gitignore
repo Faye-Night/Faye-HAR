@@ -1,9 +1,50 @@
+# ---- Python ----
 __pycache__/
 *.py[cod]
-*.pyc
+*$py.class
 .venv/
 venv/
 env/
-*.log
+ENV/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---- 编辑器 / IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---- 系统 ----
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# ---- 临时与日志 ----
+*.log
+*.tmp
+*.bak
+*.orig
+
+# ---- 抓包过程中的临时副本（浏览器配置、缓存、Cookies、History 等）----
+.edge-profile/
+.chrome-profile/
+.ls/
+.cdp/
+*.sqlite
+*.db-journal
+*.db-wal
+
+# 未整理的原始抓包：先落地为 .raw.har，清理凭据后再改名入库
+*.raw.har
+*.devtools.json
+
+# ---- 凭据（切勿提交）----
+.env
+.env.*
+*.pem
+*.key
+secrets.json

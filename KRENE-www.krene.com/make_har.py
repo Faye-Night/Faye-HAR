@@ -75,7 +75,7 @@ har = {"log": {"version":"1.2",
   "pages":[],
   "entries": entries}}
 
-out = r"D:\Files\Code\HAR\krene-daily-checkin.har"
+out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "krene-daily-checkin.har")
 with open(out,"w",encoding="utf-8") as f:
     json.dump(har, f, ensure_ascii=False, indent=2)
 print("WROTE", out, os.path.getsize(out), "bytes")

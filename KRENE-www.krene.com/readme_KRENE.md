@@ -154,3 +154,32 @@ Krene 的 token（JWT）有效期 **30 天**。过期后 qd 会报 401，换新 
 | token 失效 | 本地 mock（返回 code 401） | ✅ 第 2 条被失败断言正确拦下 |
 | 真实网络 | 打真 `www.krene.com` | ✅ 5 条全过，日志正常生成 |
 | 真实 qd 部署 | 自建 qd 容器实际执行 | ✅ 签到成功，水滴 0 → 50，接口复查余额与活动状态一致 |
+
+---
+
+## 目录文件
+
+| 文件 | 用途 |
+| --- | --- |
+| `krene-daily-checkin.qd.har` | qd 专用模板（5 条请求），推荐上传这个 |
+| `krene-daily-checkin.har` | 标准 HAR 1.2 抓包记录（3 条请求），用于分析/调试 |
+| `make_qd_har.py` | 重新生成 `krene-daily-checkin.qd.har` |
+| `make_har.py` | 重新生成 `krene-daily-checkin.har`（会实际请求接口） |
+| `readme_KRENE.md` | 本文件 |
+
+## 站点更新后如何重制
+
+Krene 改版导致签到失效时，按以下步骤重制：
+
+1. **改接口地址 / 请求体**：编辑 `make_qd_har.py` 顶部的 `BASE`、各 entry 的 `url`、`data` 与 `success_asserts` / `failed_asserts` / `extract_variables` 正则。
+2. **重新生成模板**：
+   ```powershell
+   python make_qd_har.py
+   ```
+   输出覆盖同目录的 `krene-daily-checkin.qd.har`（凭据为占位符，可直接提交）。
+3. **重新抓标准 HAR**（可选）：在 `make_har.py` 顶部临时填入自己的 `TOKEN` / `KUSER`，运行后生成 `krene-daily-checkin.har`，跑完记得把凭据改回占位符。
+4. **本地验证**：用 qd 官方 `Fetcher.do_fetch` 或直接导入 qd 跑一次，确认日志正常、水滴变化正确。
+5. **更新本文件**：同步修改「签到链路」「响应与判定」「已验证」等小节。
+
+> 生成脚本输出路径取脚本自身所在目录，仓库整体移动后无需改路径。
+

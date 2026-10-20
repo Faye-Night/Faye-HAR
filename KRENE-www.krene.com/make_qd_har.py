@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """生成 Krene 每日签到 qd 模板（含 __log__ 水滴变化回报）"""
 import json
+import os
 import sys
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -169,11 +170,16 @@ def build(real):
 
 
 if __name__ == "__main__":
-    for real, path in [
-        (True, r"D:\Files\Code\HAR\krene-daily-checkin.qd.har"),
-        (False, r"D:\Files\Code\HAR\krene-daily-checkin.qd.sanitized.har"),
+    # 输出到脚本所在目录，避免硬编码绝对路径（仓库可整体移动）。
+    # real=False → 凭据为 {{Authorization}} / {{krene_user}} 占位符，可直接入库。
+    # real=True  → 把 REAL_TOKEN / REAL_USER 写成 default 值，仅供本地调试，
+    #              产物含真实凭据，切勿提交。
+    here = os.path.dirname(os.path.abspath(__file__))
+    for real, name in [
+        (False, "krene-daily-checkin.qd.har"),
     ]:
         tpl = build(real)
+        path = os.path.join(here, name)
         with open(path, "w", encoding="utf-8") as f:
             json.dump(tpl, f, ensure_ascii=False, indent=2)
             f.write("\n")

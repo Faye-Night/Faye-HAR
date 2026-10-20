@@ -27,11 +27,23 @@
 .
 ├── README.md                      # 本文件：总目录
 ├── AGENTS.md                      # 项目级规则
+├── .dsh/skills/make-har/          # 项目级 skill：制作 HAR 的完整流程
 └── {网站名}-{网址}/                # 每个站点一个目录
     ├── readme_{网站名}.md          # 该站点的使用说明
     ├── *.qd.har                   # qd 专用模板（推荐）
     └── *.har                      # 标准 HAR 抓包记录
 ```
+
+## 制作新 HAR
+
+本仓库自带项目级 skill `make-har`（位于 `.dsh/skills/make-har/`），在 DSH 会话中可直接调用，涵盖：
+
+- 侦察阶段：CDP 探测、SPA bundle 逆向、浏览器锁库时如何提取凭据
+- 模板编写：qd 数组格式、断言优先级、变量 `default` 技巧、`__log__` 日志回报
+- 本地验证：mock 服务器 + qd 官方引擎跑四类场景
+- 落盘规范：目录命名、生成脚本、凭据占位
+
+配套参考资料在 `references/` 下（`recon.md` 侦察、`qd-engine.md` 引擎行为）。
 
 ## 安全说明
 
